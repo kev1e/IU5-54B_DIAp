@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="container">
+        <h3  class="text-center">Новая декларация</h3>
+         <div class="form-group">
+            <label class="form-label">Дата провоза</label>
+            {% if declaration.date %}
+                <input placeholder="Введите дату" disabled type="text" class="form-control" style="width: 250px" value="{{ declaration.date }}">
+            {% else %}
+                <input placeholder="Введите дату" disabled type="text" class="form-control" style="width: 250px">
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'delete_declaration' declaration.id %}">
+            {% csrf_token %}
+                <button class="btn btn-danger delete-draft-declaration-btn" type="submit">
+                    Удалить
+                </button>
+            </a>
+        </form>
+        <h4 class="text-center">Вещи</h4>
+        <div class="cards-wrapper d-flex flex-column">
+            {% for item in declaration.get_items %}
+                <div class="card w-100 mb5">
+                     <div class="row g-0">
+                        <div class="col-md-6 d-flex justify-center">
+                            <img src="{{ item.get_image }}">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <p class="card-text">Цена: {{ item.price }} руб</p>
+                                <div class="form-group">
+                                    <label class="form-label">Количество</label>
+                                    {% if item.value %}
+                                        <input placeholder="Введите количество" disabled type="text" class="form-control" style="width: 250px" value="{{ item.value }}">
+                                    {% else %}
+                                        <input placeholder="Введите количество" disabled type="text" class="form-control" style="width: 250px">
+                                    {% endif %}
+                                </div>
+                                <a href="/items/{{ item.id }}/" class="btn btn-primary" style="width: 100px">
+                                    Открыть
+                                </a>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock content %}
